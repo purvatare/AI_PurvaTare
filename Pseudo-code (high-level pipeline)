@@ -1,0 +1,19 @@
+function generate_video(concept_request):
+# 1. KG retrieval
+nodes = KG.retrieve(concept_request)
+
+
+# 2. LLM generation (structured)
+slides_json = LLM.generate_slides(nodes, audience='undergrad', duration=120)
+
+
+# 3. Renderer
+manim_code = json_to_manim(slides_json)
+video = manim_render(manim_code)
+
+
+# 4. TTS
+audio = tts(slides_json.script)
+final = mux_audio(video, audio)
+return final
+``
